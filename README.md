@@ -297,7 +297,15 @@ The script iterates this entire process by varying the number of training point 
 
 ---
 
-## 6. How to Run
+## 6. Results
+
+The calibration algorithm was executed on 8 2D/3D pairs and tested on 11 2D/3D pairs. We obtained the following results:
+-  Standard deviation of the error u : 1.56 pixels
+-  Standard deviation of the error v : 1.93 pixels
+
+It is very important to double check the 2d measured value because otherwise the results will be biased. 
+
+## 7. How to Run
 
 ### Dependencies
 
