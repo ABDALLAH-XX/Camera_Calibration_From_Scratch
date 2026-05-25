@@ -26,7 +26,6 @@ The dataset consists of a single image `mire.tiff` representing a 3D calibration
 * **Geometry:** The rig is composed of three mutually perpendicular planes intersecting at the origin $(0, 0, 0)$. Each plane contains a grid pattern of squares.
 * **Scale:** By convention, each square on the grid measures exactly `1 cm × 1 cm`.
 * **Orientation:**
-
   * X-axis: Points to the left
   * Y-axis: Points to the right
   * Z-axis: Points up (vertical axis)
@@ -140,7 +139,7 @@ $$
 
 #### 1. Normalize Coordinates
 
-Compute matrices $T$ and $U$ from the data points, then calculate all $\tilde{A}_i$ and $\tilde{a}_i$
+Compute matrices $T$ and $U$ from the data points, then calculate all $\tilde{A}_i$ and $\tilde{a}_i$.
 
 #### 2. Compute Component Blocks
 
@@ -187,15 +186,15 @@ such that:
 $$
 B =
 \begin{bmatrix}
-B_1 \
-\vdots \
+B_1 \\
+\vdots \\
 B_n
 \end{bmatrix},
 \quad
 C =
 \begin{bmatrix}
-C_1 \
-\vdots \
+C_1 \\
+\vdots \\
 C_n
 \end{bmatrix}
 $$
@@ -217,7 +216,7 @@ Compute the eigenvalues and eigenvectors of $D$.
 Isolate the eigenvector associated with the smallest eigenvalue of $D$, and normalize it so that:
 
 $$
-|v_2| = 1
+\|v_2\| = 1
 $$
 
 #### 7. Back-substitute for $v_1$
@@ -284,7 +283,6 @@ v_{proj} \\
 1
 \end{bmatrix}
 =
-
 P
 \begin{bmatrix}
 X_{world} \\
@@ -298,10 +296,13 @@ $$
 
 The pipeline computes the standard deviation (2nd-order moments $\sigma_u$, $\sigma_v$) of the validation residuals:
 
+$$
+\Delta u = u_{original} - u_{proj}
+$$
 
-$$\Delta u = u_{original} - u_{proj}$$
-$$\Delta v = v_{original} - v_{proj}$$
-
+$$
+\Delta v = v_{original} - v_{proj}
+$$
 
 The script iterates this entire process by varying the number of training point pairs from 7 up to 12, plotting the evolution of standard deviation errors to demonstrate how increasing data cardinality impacts the stability and accuracy of the linear Faugeras-Toscani solver.
 
