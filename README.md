@@ -274,7 +274,11 @@ $$
 different landmark points.
 
 It projects them onto the image space using the estimated matrix $P$:
-$$\lambda\begin{bmatrix} u_{proj} \\ v_{proj} \\ 1 \end{bmatrix} = P\begin{bmatrix} X_{world} \\ Y_{world} \\ Z_{world} \\ 1 \end{bmatrix}$$
+$$
+\begin{align*}
+\lambda\begin{bmatrix} u_{proj} \\ v_{proj} \\ 1 \end{bmatrix} &= P\begin{bmatrix} X_{world} \\ Y_{world} \\ Z_{world} \\ 1 \end{bmatrix}
+\end{align*}
+$$
 
 ### 3. Precision Analysis (Error Moments)
 
