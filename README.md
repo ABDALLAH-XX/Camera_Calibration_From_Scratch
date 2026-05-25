@@ -276,6 +276,7 @@ different landmark points.
 It projects them onto the image space using the estimated matrix $P$:
 
 $$
+
 \lambda
 \begin{bmatrix}
 u_{proj} \\
@@ -290,6 +291,7 @@ Y_{world} \\
 Z_{world} \\
 1
 \end{bmatrix}
+
 $$
 
 ### 3. Precision Analysis (Error Moments)
@@ -297,11 +299,15 @@ $$
 The pipeline computes the standard deviation (2nd-order moments $\sigma_u$, $\sigma_v$) of the validation residuals:
 
 $$
+
 \Delta u = u_{original} - u_{proj}
+
 $$
 
 $$
+
 \Delta v = v_{original} - v_{proj}
+
 $$
 
 The script iterates this entire process by varying the number of training point pairs from 7 up to 12, plotting the evolution of standard deviation errors to demonstrate how increasing data cardinality impacts the stability and accuracy of the linear Faugeras-Toscani solver.
