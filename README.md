@@ -1,5 +1,7 @@
 # Camera Calibration From Scratch (Faugeras-Toscani Method)
 
+
+
 The goal of this project is to implement camera calibration and analyze re-projection pixel errors completely from scratch using the **Faugeras-Toscani algorithm**, avoiding any ready-to-use OpenCV calibration black-boxes (such as `cv2.calibrateCamera`).
 
 ---
@@ -293,17 +295,28 @@ $$
 \Delta v = v_{original} - v_{proj}
 $$
 
-The script iterates this entire process by varying the number of training point pairs from 7 up to 12, plotting the evolution of standard deviation errors to demonstrate how increasing data cardinality impacts the stability and accuracy of the linear Faugeras-Toscani solver.
-
 ---
 
 ## 6. Results
 
-The calibration algorithm was executed on 8 2D/3D pairs and tested on 11 2D/3D pairs. We obtained the following results:
--  Standard deviation of the error u : 1.56 pixels
--  Standard deviation of the error v : 1.93 pixels
 
-It is very important to double check the 2d measured value because otherwise the results will be biased. 
+The calibration algorithm was executed on two configurations. We obtained the following results:
+
+![Reprojection Error](reprojection_error.png)
+
+
+| Metric | Config A | Config B |
+|---|---|---|
+| Training points | 6 | 8 |
+| Validation points | 10 | 11 |
+| σu | 1.65 px | 1.56 px |
+| σv | 1.98 px | 1.93 px |
+
+
+Adding more training points improves the solver stability, consistent  
+with the overdetermined least-squares formulation of the Faugeras-Toscani algorithm.
+
+---
 
 ## 7. How to Run
 

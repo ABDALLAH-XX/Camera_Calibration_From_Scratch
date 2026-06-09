@@ -1,11 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.linalg as linalg
 
 """Camera Calibration using Faugeras-Toscani algorithm"""
 
 #--------------------2D and 3D Points Extraction from the 3D Chessboard--------------------
-Points2D = np.array([[563, 315], [406, 204], [428, 165], [351, 326], [321, 154], [58, 244], [102, 190], [426, 116]])
-Points3D = np.array([[0, 7, 1], [0, 2, 2], [0, 3, 3], [2, 3, 0], [1, 0, 3], [7, 0, 2], [6, 0, 3], [0, 3, 4]])
+Points2D = np.array([[563, 315], [406, 204], [428, 165], [351, 326], [321, 154], [58, 244]])#, [102, 190], [426, 116]])
+Points3D = np.array([[0, 7, 1], [0, 2, 2], [0, 3, 3], [2, 3, 0], [1, 0, 3], [7, 0, 2]])#, [6, 0, 3], [0, 3, 4]])
 
 print(f"2D points shape: {Points2D.shape}")
 print(f"3D points shape: {Points3D.shape}")
@@ -105,7 +106,26 @@ U = np.array([[beta, 0, 0, -beta * Bary3D[0]],
 
 P = np.linalg.inv(T) @ P_tilde @ U
 print("Final Denormalized Projection Matrix P:\n", P, "\n")
-print("-" * 80)
+print("-" * 80) 
+
+#--------------------K Extraction---------------------
+# We extract the sub matrix (3x3) on P
+M = P[0:3, 0:3]
+
+# RQ decompostion to separate K (upper triangular) and R (rotation matrix)
+K_estimate, R_estimate = linalg.rq(M)
+
+# Correcting the signs on K to ensure positive focal points
+for i in range(3):
+    if K_estimate[i, i] < 0:
+        K_estimate[:, i] = -K_estimate[:, i]
+
+# Homogeneous normalization
+K_estimate = K_estimate / K_estimate[2, 2]
+
+print("--- INTRISIC MATRIX K ---")
+print(np.round(K_estimate, 4),"\n")
+print("-" * 80) 
 
 #--------------------Validation & Evaluation Sequence--------------------
 test3D = np.array([[1, 1, 0], [4, 1, 0], [0, 5, 6], [0, 6, 2], [3, 0, 2], [5, 0, 4], [0, 0, 0], [0, 0, 3], [5, 5, 0], [0, 7, 4], [2, 7, 0]])
@@ -135,12 +155,14 @@ print(f"Standard deviation of the error v : {std_v:.2f} pixels\n")
 
 #--------------------Error Visualization Map--------------------
 plt.figure(figsize=(8, 6))
-plt.quiver(u_measured, v_measured, u_errors, v_errors, angles='xy', scale_units='xy', scale=1, color='blue', label='Error Vectors')
+scale = 10
+plt.quiver(u_measured, v_measured, scale*u_errors, scale*v_errors, angles='xy', scale_units='xy', scale=1, color='blue', label='Error Vectors')
 plt.scatter(u_measured, v_measured, color='red', marker='o', label='Measured Corners')
-plt.title("Projection Error Vector Map (Faugeras-Toscani Calibration)")
+plt.title("Projection Error Vector Map (Faugeras-Toscani Calibration) — vectors scaled ×10")
 plt.xlabel("u (pixels)")
 plt.ylabel("v (pixels)")
 plt.gca().invert_yaxis()  # Match pixel image row directions
 plt.grid(True, linestyle='--', alpha=0.5)
 plt.legend()
+plt.savefig("reprojection_error.png", dpi=150, bbox_inches='tight')
 plt.show()
